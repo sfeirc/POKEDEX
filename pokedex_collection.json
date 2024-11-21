@@ -1,0 +1,291 @@
+{
+    "info": {
+      "name": "Pokedex API Collection",
+      "_postman_id": "a1b2c3d4-5678-9101-1121-314151617181",
+      "description": "Collection Postman pour l'API Pokedex",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Obtenir tous les Pokémon",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              ""
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir un Pokémon au hasard",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/hasard",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "hasard"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir un Pokémon par ID",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/:id",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              ":id"
+            ],
+            "variable": [
+              {
+                "key": "id",
+                "value": "1"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir un Pokémon par nom",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/name/:name",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "name",
+              ":name"
+            ],
+            "variable": [
+              {
+                "key": "name",
+                "value": "Pikachu"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par type",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/type/:type",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "type",
+              ":type"
+            ],
+            "variable": [
+              {
+                "key": "type",
+                "value": "Electric"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par HP",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/hp/:hp",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "hp",
+              ":hp"
+            ],
+            "variable": [
+              {
+                "key": "hp",
+                "value": "35"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par Attaque",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/attack/:attack",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "attack",
+              ":attack"
+            ],
+            "variable": [
+              {
+                "key": "attack",
+                "value": "55"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par Défense",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/defense/:defense",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "defense",
+              ":defense"
+            ],
+            "variable": [
+              {
+                "key": "defense",
+                "value": "40"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par Vitesse",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/speed/:speed",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "speed",
+              ":speed"
+            ],
+            "variable": [
+              {
+                "key": "speed",
+                "value": "90"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir des Pokémon par Attaque Spéciale",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/spattack/:spattack",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "spattack",
+              ":spattack"
+            ],
+            "variable": [
+              {
+                "key": "spattack",
+                "value": "50"
+              }
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Obtenir l'image d'un Pokémon par ID",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5001/pokemon/image/:id",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5001",
+            "path": [
+              "pokemon",
+              "image",
+              ":id"
+            ],
+            "variable": [
+              {
+                "key": "id",
+                "value": "25"
+              }
+            ]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+  

@@ -1,0 +1,124 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #ef5350;
+    padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+}
+
+header h1 {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+#search-type {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#search-bar {
+    width: 200px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+#search-button, #random-button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-button:hover, #random-button:hover {
+    background-color: #e0e0e0;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.pokemon-card {
+    background-color: #fff;
+    width: 250px;
+    margin: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pokemon-card img {
+    width: 100%;
+    height: auto;
+}
+
+.pokemon-info {
+    padding: 15px;
+}
+
+.pokemon-info h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.pokemon-info p {
+    margin-bottom: 5px;
+}
+
+.type-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+}
+
+.type-Fire { background-color: #fd7d24; }
+.type-Water { background-color: #4592c4; }
+.type-Grass { background-color: #9bcc50; }
+.type-Electric { background-color: #eed535; }
+.type-Psychic { background-color: #f366b9; }
+.type-Ice { background-color: #51c4e7; }
+.type-Dragon { background-color: #0b6dc3; }
+.type-Dark { background-color: #707070; }
+.type-Fairy { background-color: #fdb9e9; }
+.type-Normal { background-color: #a4acaf; }
+.type-Fighting { background-color: #d56723; }
+.type-Flying { background-color: #3dc7ef; }
+.type-Poison { background-color: #b97fc9; }
+.type-Ground { background-color: #f7de3f; }
+.type-Rock { background-color: #a38c21; }
+.type-Bug { background-color: #729f3f; }
+.type-Ghost { background-color: #7b62a3; }
+.type-Steel { background-color: #9eb7b8; }
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #ef5350;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

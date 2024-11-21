@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokedex - Votre Collection Pokémon</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+    <header>
+        <h1>Pokedex</h1>
+        <select id="search-type">
+            <option value="name">Nom</option>
+            <option value="id">ID</option>
+            <option value="type">Type</option>
+            <option value="hp">HP</option>
+            <option value="attack">Attaque</option>
+            <option value="defense">Défense</option>
+            <option value="spattack">Attaque Spéciale</option>
+            <option value="speed">Vitesse</option>
+        </select>
+        <input type="text" id="search-bar" placeholder="Entrez votre recherche...">
+        <button id="search-button">Rechercher</button>
+        <button id="random-button">Pokémon Hasard</button>
+    </header>
+    <main id="pokemon-container">
+
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
