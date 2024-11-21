@@ -31,11 +31,23 @@ try {
 
 // Route pour afficher la page principale
 app.get('/', (req, res) => {
+    //connecter via une clé api 
+    if (req.query.apikey !== 'tX677DA4V7ssFK53GgyeB99xjDk53ALP8375zcceVBt') {
+        res.status(401).send('Clé API invalide');
+        return;
+    }
+    
+    
     res.json(pokedex);
 });
 
 // Route pour renvoyer un Pokémon au hasard
 app.get('/hasard', (req, res) => {
+    //connecter via une clé api dans le header
+    if (req.headers.apikey !== 'tX677DA4V7ssFK53GgyeB99xjDk53ALP8375zcceVBt') {
+        res.status(401).send('Clé API invalide');
+        return;
+    }    
     const randomIndex = Math.floor(Math.random() * pokedex.length);
     res.json(pokedex[randomIndex]);
 });
