@@ -31,23 +31,11 @@ try {
 
 // Route pour afficher la page principale
 app.get('/', (req, res) => {
-    //connecter via une clé api 
-    if (req.query.apikey !== 'tX677DA4V7ssFK53GgyeB99xjDk53ALP8375zcceVBt') {
-        res.status(401).send('Clé API invalide');
-        return;
-    }
-    
-    
     res.json(pokedex);
 });
 
 // Route pour renvoyer un Pokémon au hasard
 app.get('/hasard', (req, res) => {
-    //connecter via une clé api dans le header
-    if (req.headers.apikey !== 'tX677DA4V7ssFK53GgyeB99xjDk53ALP8375zcceVBt') {
-        res.status(401).send('Clé API invalide');
-        return;
-    }    
     const randomIndex = Math.floor(Math.random() * pokedex.length);
     res.json(pokedex[randomIndex]);
 });
@@ -131,27 +119,26 @@ app.get('/pokemon/speed/:speed', (req, res) => {
 });
 
 // Route pour renvoyer la liste des Pokémon par Sp. Attack
-app.get('/pokemon/spattack/:spattack', (req, res) => {
+app.get('/pokemon/spattack/:', (req, res) => {
     const spattack = req.params.spattack;
-    const pokemonList = pokedex.filter(pokemon => pokemon.base['Sp. Attack'] == spattack);
+    const pokemonList = pokedex.filter(pokemon => pokemon.base.Sp .Attack == spattack);
     if (pokemonList.length > 0) {
         res.json(pokemonList);
     } else {
-        res.status(404).send('Aucun Pokémon trouvé pour cette Attaque Spéciale');
+        res.status(404).send('Aucun Pokémon trouvé pour cette Vitesse');
     }
 });
-
 
 // Fonction pour convertir l'ID en 3 chiffres
 function formatId(id) {
     return id.toString().padStart(3, '0');
 }
 // Route pour renvoyer les données d'un Pokémon avec le chemin de son image
-app.get('/pokemon/image/:id', (req, res) => {
+app.get('/pokemon/images/:id', (req, res) => {
     const id = req.params.id;
     const formattedId = formatId(id); // Utilisation de formatId
-    const imageRelativePath = `../BACKEND/FILES/thumbnails/${formattedId}.png`;
-    const imagePath = path.join(__dirname, '../BACKEND/FILES/thumbnails/', `${formattedId}.png`);
+    const imageRelativePath = `./FILES/thumbnails/${formattedId}.png`;
+    const imagePath = path.join(__dirname, './FILES/images/', `${formattedId}.png`);
     
     // Trouver le Pokémon correspondant
     const pokemon = pokedex.find(p => p.id == id);
@@ -159,14 +146,14 @@ app.get('/pokemon/image/:id', (req, res) => {
         // Vérifier si le fichier image existe
         fs.access(imagePath, fs.constants.F_OK, (err) => {
             if (err) {
-                // Si l'image n'existe pas, on renvoie les données du Pokémon sans le chemin de l'image
+
                 res.json({
                     ...pokemon,
                     image: null,
                     message: 'Image non trouvée'
                 });
             } else {
-                // Si l'image existe, on ajoute le chemin relatif de l'image aux données du Pokémon
+
                 res.json({
                     ...pokemon,
                     image: imageRelativePath
@@ -178,9 +165,26 @@ app.get('/pokemon/image/:id', (req, res) => {
     }
 });
 
+// Route pour renvoyer l'image d'un Pokémon à partir de son identifiant
+app.get('/pokemon/image/:id', (req, res) => {
+    const id = req.params.id;
+    const formattedId = formatId(id); // Utilisation de formatId
+    const imagePath = path.join(__dirname, './FILES/images/', `${formattedId}.png`);
+    
+    // Vérifier si le fichier image existe
+    fs.access(imagePath, fs.constants.F_OK, (err) => {
+        if (err) {
+
+            res.status(404).send('Image non trouvée');
+        } else {
+            // Si l'image existe, on l'envoie en réponse
+            res.sendFile(imagePath);
+        }
+    });
+});
 
 
 // Lancement du serveur et attente
-app.listen(PORT, () => {
-    console.log('Le serveur Pokedex est sur le port ' + PORT);
+app.listen(5001, '0.0.0.0', () => {
+  console.log('Server is running on port 5001');
 });
