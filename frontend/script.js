@@ -72,9 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fonction pour afficher les cartes Pokémon
     const displayPokemon = (pokemonList) => {
         pokemonContainer.innerHTML = ''; // Efface les résultats précédents
-        pokemonList.forEach(pokemon => {
+        pokemonList.forEach((pokemon, index) => {
             const card = document.createElement('div');
             card.classList.add('pokemon-card');
+            card.style.animationDelay = `${index * 0.1}s`;
 
             // Fonction pour formater l'identifiant du Pokémon avec des zéros au début
             function formatId(id) {
@@ -84,9 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Image du Pokémon
             const img = document.createElement('img');
             const formattedId = formatId(pokemon.id);
-            img.src = `../${BACKEND_URL}/FILES/thumbnails/${formattedId}.png`;
+            img.src = `${BACKEND_URL}/pokemon/image/${formattedId}`;
             img.onerror = () => {
-                img.src = 'placeholder.png'; 
+                img.src = 'placeholder.png';
             };
             card.appendChild(img);
 
@@ -110,12 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Statistiques de base
             const stats = document.createElement('p');
             stats.innerHTML = `
-                PV: ${pokemon.base.HP}<br>
-                Attaque: ${pokemon.base.Attack}<br>
-                Défense: ${pokemon.base.Defense}<br>
-                Attaque Spéciale: ${pokemon.base['Sp. Attack']}<br>
-                Défense Spéciale: ${pokemon.base['Sp. Defense']}<br>
-                Vitesse: ${pokemon.base.Speed}
+                <strong>PV:</strong> ${pokemon.base.HP}<br>
+                <strong>Attaque:</strong> ${pokemon.base.Attack}<br>
+                <strong>Défense:</strong> ${pokemon.base.Defense}<br>
+                <strong>Attaque Spéciale:</strong> ${pokemon.base['Sp. Attack']}<br>
+                <strong>Défense Spéciale:</strong> ${pokemon.base['Sp. Defense']}<br>
+                <strong>Vitesse:</strong> ${pokemon.base.Speed}
             `;
             info.appendChild(stats);
 
@@ -131,6 +132,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (query) {
             fetchPokemon(searchType, query);
+        }
+    });
+
+    searchBar.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchButton.click();
         }
     });
 
