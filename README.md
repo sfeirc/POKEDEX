@@ -269,7 +269,7 @@ Pour tester les requêtes API, une collection Postman est disponible. Vous pouve
 
 1. **Télécharger la collection Postman**
 
-   [Collection Postman Pokedex](path_to_postman_collection.json)
+   [Collection Postman Pokedex](pokedex_collection.json)
 
 2. **Importer dans Postman**
 
