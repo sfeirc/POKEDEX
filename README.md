@@ -1,4 +1,4 @@
-# Pokedex - Votre Collection Pokémon 🕹️
+# Pokedex - Collection Pokémon 🕹️
 
 <div align="center">
 
