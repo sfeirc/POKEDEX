@@ -1,2 +1,4 @@
-node_modules/
-BACKEND/node_modules/
+.idea
+.DS_STORE
+node_modules
+.vscode
