@@ -37,7 +37,7 @@
 ## ✨ Introduction
 Bienvenue dans **Pokedex** 🕹️, votre application web ultime pour explorer le monde des Pokémon ! Plongez dans une expérience interactive riche en fonctionnalités et en animations.
 
-Ce projet est une application web complète qui permet aux utilisateurs de :dwfhdrfqshdfqshdqsh
+Ce projet est une application web complète qui permet aux utilisateurs de :
 
 - 🔎 **Rechercher des Pokémon** par nom, ID, type, et statistiques.
 - 📊 **Afficher des informations détaillées** sur chaque Pokémon, y compris leur image, types, et statistiques avec des graphiques dynamiques.
