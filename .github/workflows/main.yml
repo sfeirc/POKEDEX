@@ -1,56 +1,26 @@
-# Nom du workflow
-name: "Déploiement auto suite à un push"
-
-# Déclencheur 
-on:  
-  push: 
-    branches: 
-      - main
-
-# -----------------------------------------------------
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy:
-    name: "Déploiement sur le serveur"
+  # Création du porteclé SSH
+  create_ssh:
+    name: "Création du SSH"
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout du code
-        uses: actions/checkout@v2
-
-      - name: Configuration SSH
-        env: 
-          SSH_KEY: ${{secrets.SSH_KEY}}
-          SSH_HOST: ${{secrets.SSH_HOST}}
-          SSH_PORT: ${{secrets.SSH_PORT}}
-          SSH_USER: ${{secrets.SSH_USER}}
+      - name: "Create private SSH key"
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          # Création du dossier SSH
-          mkdir -p ~/.ssh
-          
-          # Écriture de la clé privée
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          
-          # Configuration SSH
-          echo -e "Host deploy_host\n\
-            HostName $SSH_HOST\n\
-            User $SSH_USER\n\
-            Port $SSH_PORT\n\
-            IdentityFile ~/.ssh/deploy_key\n\
-            StrictHostKeyChecking no" > ~/.ssh/config
-
-      - name: Déploiement via SSH
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/id_rsa.key
+          chmod 600 ~/.ssh/id_rsa.key
+          cat >>~/.ssh/config <<END
+          Host serveurProd
+          HostName $SSH_HOST
+          User $SSH_USER
+          IdentityFile ~/.ssh/id_rsa.key
+          StrictHostKeyChecking no
+          END
+      - name: "Connexion au serveur de prod"
         run: |
-          # Synchronisation des fichiers
-          rsync -avz --delete \
-            --exclude '.git*' \
-            --exclude 'node_modules' \
-            ./ deploy_host:/var/www/pokedex/
-
-          # Connexion SSH et redémarrage des services
-          ssh deploy_host '
-            cd /var/www/pokedex && \
-            docker-compose down && \
-            docker-compose up -d --build
-          '
+          ssh serveurProd 'cd /var/www/html/CI_CD_Deploiement/ && git fetch && git pull'
