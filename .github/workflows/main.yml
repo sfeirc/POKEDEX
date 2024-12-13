@@ -42,12 +42,15 @@ jobs:
 
       - name: Déploiement via SSH
         run: |
-          # Synchronisation des fichiers avec rsync
-          rsync -avz -e "ssh -p $SSH_PORT 22 ~/.ssh/deploy_key" ./ deploy_host:/var/www/html/pokedex/
+          # Synchronisation des fichiers
+          rsync -avz --delete \
+            --exclude '.git*' \
+            --exclude 'node_modules' \
+            ./ deploy_host:/var/www/pokedex/
 
           # Connexion SSH et redémarrage des services
           ssh deploy_host '
-            cd /var/www/html/pokedex && \
+            cd /var/www/pokedex && \
             docker-compose down && \
             docker-compose up -d --build
           '
