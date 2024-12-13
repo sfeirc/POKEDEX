@@ -9,31 +9,63 @@ on:
 
 # -----------------------------------------------------
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Création du porteclé SSH
-  create_ssh:
-    name: "Création du SSH"
+  deploy:
+    name: "Déploiement sur le serveur"
     runs-on: ubuntu-latest
+
     steps:
-      - name: "Create private SSH key"
-        env:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Configuration SSH
+        env: 
           SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          mkdir -p ~/.ssh/
+          # Création du dossier SSH
+          mkdir -p ~/.ssh
+          
+          # Écriture de la clé privée
           echo "$SSH_KEY" > ~/.ssh/id_rsa.key
           chmod 600 ~/.ssh/id_rsa.key
-          cat > ~/.ssh/config <<EOF
-Host serveurProd
-  HostName $SSH_HOST
-  User $SSH_USER
-  IdentityFile ~/.ssh/id_rsa.key
-  StrictHostKeyChecking no
-EOF
-          chmod 600 ~/.ssh/config
+          
+          # Configuration SSH
+          cat >>~/.ssh/config <<END
+          Host serveurProd
+            HostName $SSH_HOST
+            User $SSH_USER
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/id_rsa.key
+            StrictHostKeyChecking no
+            LogLevel DEBUG3
+          END
 
-      - name: "Connexion au serveur de prod"
+      - name: Test de connexion SSH
         run: |
-          ssh serveurProd 'cd /var/www/html/CI_CD_Deploiement/ && git fetch && git pull'
+          ssh -v serveurProd 'echo "Test de connexion réussi"'
+
+      - name: Déploiement
+        run: |
+          # Synchronisation des fichiers
+          rsync -avvz --delete \
+            --exclude '.git*' \
+            --exclude 'node_modules' \
+            --timeout=60 \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            ./ serveurProd:/var/www/pokedex/ || {
+              echo "Erreur lors de la synchronisation rsync"
+              exit 1
+            }
+
+          # Redémarrage des services Docker
+          ssh serveurProd '
+            cd /var/www/pokedex && \
+            docker-compose down && \
+            docker-compose up -d --build
+          ' || {
+            echo "Erreur lors du redémarrage des services Docker"
+            exit 1
+          }
