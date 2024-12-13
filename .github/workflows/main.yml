@@ -5,31 +5,29 @@ name: "Déploiement auto suite à un push"
 on:  
   push: 
     branches: 
-      -main
+      - main
 
-      
 # -----------------------------------------------------
-
 
 jobs:
   creation-vm:
-    name : " Création instance ubuntu"
+    name : "Création instance ubuntu"
     runs-on : ubuntu-latest
 
     steps:
-      - name : " Création du jeu de clés pour l'utilisateur deploy"
-      
-      # Récupération des secrets
-      env: 
-        SSH_KEY ${{secrets.SSH_KEY}}
-        SSH_HOST ${{secrets.SSH_HOST}}
-        SSH_PORT ${{secrets.SSH_PORT}}
-        SSH_USER ${{secrets.SSH_USER}}
+      - name : "Création du jeu de clés pour l'utilisateur deploy"
+        
+        # Récupération des secrets
+        env: 
+          SSH_KEY: ${{secrets.SSH_KEY}}
+          SSH_HOST: ${{secrets.SSH_HOST}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
+          SSH_USER: ${{secrets.SSH_USER}}
 
-    run: 
-      # Fichier SSH 
-      mkdir 
+        run: |
+          # Fichier SSH 
+          mkdir 
 
-      # Connexion
+          # Connexion
 
-      # Git push
+          # Git push
