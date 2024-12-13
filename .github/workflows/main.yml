@@ -42,8 +42,8 @@ jobs:
 
       - name: Déploiement via SSH
         run: |
-          # Synchronisation des fichiers
-            ./ deploy_host:/var/www/html/pokedex/
+          # Synchronisation des fichiers avec rsync
+          rsync -avz -e "ssh -p $SSH_PORT -i ~/.ssh/deploy_key" ./ deploy_host:/var/www/html/pokedex/
 
           # Connexion SSH et redémarrage des services
           ssh deploy_host '
