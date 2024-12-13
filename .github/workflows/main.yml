@@ -21,8 +21,6 @@ jobs:
       - name: Configuration SSH
         env: 
           SSH_KEY: ${{secrets.SSH_KEY}}
-          SSH_HOST: ${{secrets.SSH_HOST}}
-          SSH_PORT: ${{secrets.SSH_PORT}}
           SSH_USER: ${{secrets.SSH_USER}}
         run: |
           # Création du dossier SSH
@@ -32,11 +30,11 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           
-          # Configuration SSH avec plus de verbosité
+          # Configuration SSH avec l'IP et le port spécifiques
           echo -e "Host deploy_host\n\
-            HostName $SSH_HOST\n\
+            HostName 172.16.199.254\n\
             User $SSH_USER\n\
-            Port $SSH_PORT\n\
+            Port 22\n\
             IdentityFile ~/.ssh/deploy_key\n\
             StrictHostKeyChecking no\n\
             LogLevel DEBUG3" > ~/.ssh/config
@@ -53,6 +51,7 @@ jobs:
             --exclude '.git*' \
             --exclude 'node_modules' \
             --timeout=60 \
+            -e "ssh -p 22" \
             ./ deploy_host:/var/www/pokedex/ || {
               echo "Erreur lors de la synchronisation rsync"
               exit 1
