@@ -32,25 +32,38 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           
-          # Configuration SSH
+          # Configuration SSH avec plus de verbosité
           echo -e "Host deploy_host\n\
             HostName $SSH_HOST\n\
             User $SSH_USER\n\
             Port $SSH_PORT\n\
             IdentityFile ~/.ssh/deploy_key\n\
-            StrictHostKeyChecking no" > ~/.ssh/config
+            StrictHostKeyChecking no\n\
+            LogLevel DEBUG3" > ~/.ssh/config
+
+      - name: Test de connexion SSH
+        run: |
+          # Test de connexion SSH avec verbosité
+          ssh -v deploy_host 'echo "Test de connexion réussi"'
 
       - name: Déploiement via SSH
         run: |
-          # Synchronisation des fichiers
-          rsync -avz --delete \
+          # Synchronisation des fichiers avec plus de verbosité
+          rsync -avvz --delete \
             --exclude '.git*' \
             --exclude 'node_modules' \
-            ./ deploy_host:/var/www/pokedex/
+            --timeout=60 \
+            ./ deploy_host:/var/www/pokedex/ || {
+              echo "Erreur lors de la synchronisation rsync"
+              exit 1
+            }
 
-          # Connexion SSH et redémarrage des services
+          # Connexion SSH et redémarrage des services avec gestion d'erreurs
           ssh deploy_host '
             cd /var/www/pokedex && \
             docker-compose down && \
             docker-compose up -d --build
-          '
+          ' || {
+            echo "Erreur lors du redémarrage des services Docker"
+            exit 1
+          }
