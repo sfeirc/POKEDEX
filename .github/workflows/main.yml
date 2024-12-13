@@ -20,52 +20,37 @@ jobs:
 
       - name: Configuration SSH
         env: 
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_KEY: ${{secrets.SSH_KEY}}
+          SSH_HOST: ${{secrets.SSH_HOST}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
+          SSH_USER: ${{secrets.SSH_USER}}
         run: |
           # Création du dossier SSH
           mkdir -p ~/.ssh
           
           # Écriture de la clé privée
-          echo "$SSH_KEY" > ~/.ssh/id_rsa.key
-          chmod 600 ~/.ssh/id_rsa.key
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
           
           # Configuration SSH
-          cat >>~/.ssh/config <<END
-          Host serveurProd
-            HostName $SSH_HOST
-            User $SSH_USER
-            Port $SSH_PORT
-            IdentityFile ~/.ssh/id_rsa.key
-            StrictHostKeyChecking no
-            LogLevel DEBUG3
-          END
+          echo -e "Host deploy_host\n\
+            HostName $SSH_HOST\n\
+            User $SSH_USER\n\
+            Port $SSH_PORT\n\
+            IdentityFile ~/.ssh/deploy_key\n\
+            StrictHostKeyChecking no" > ~/.ssh/config
 
-      - name: Test de connexion SSH
-        run: |
-          ssh -v serveurProd 'echo "Test de connexion réussi"'
-
-      - name: Déploiement
+      - name: Déploiement via SSH
         run: |
           # Synchronisation des fichiers
-          rsync -avvz --delete \
+          rsync -avz --delete \
             --exclude '.git*' \
             --exclude 'node_modules' \
-            --timeout=60 \
-            -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            ./ serveurProd:/var/www/pokedex/ || {
-              echo "Erreur lors de la synchronisation rsync"
-              exit 1
-            }
+            ./ deploy_host:/var/www/pokedex/
 
-          # Redémarrage des services Docker
-          ssh serveurProd '
+          # Connexion SSH et redémarrage des services
+          ssh deploy_host '
             cd /var/www/pokedex && \
             docker-compose down && \
             docker-compose up -d --build
-          ' || {
-            echo "Erreur lors du redémarrage des services Docker"
-            exit 1
-          }
+          '
