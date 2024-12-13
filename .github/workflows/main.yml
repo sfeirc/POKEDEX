@@ -5,64 +5,38 @@ name: "Déploiement auto suite à un push"
 on:  
   push: 
     branches: 
-      - main
+      -main
 
+      
 # -----------------------------------------------------
 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy:
-    name: "Déploiement sur le serveur"
+  # Création du porteclé SSH
+  create_ssh:
+    name: "Création du SSH"
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout du code
-        uses: actions/checkout@v2
-
-      - name: Configuration SSH
-        env: 
-          SSH_KEY: ${{secrets.SSH_KEY}}
-          SSH_USER: ${{secrets.SSH_USER}}
+      - name: "Create private SSH key"
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          # Création du dossier SSH
-          mkdir -p ~/.ssh
-          
-          # Écriture de la clé privée
-          echo "$SSH_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          
-          # Configuration SSH avec l'IP et le port spécifiques
-          echo -e "Host deploy_host\n\
-            HostName 172.16.199.254\n\
-            User $SSH_USER\n\
-            Port 22\n\
-            IdentityFile ~/.ssh/deploy_key\n\
-            StrictHostKeyChecking no\n\
-            LogLevel DEBUG3" > ~/.ssh/config
-
-      - name: Test de connexion SSH
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/id_rsa.key
+          chmod 600 ~/.ssh/id_rsa.key
+          cat >>~/.ssh/config <<END
+          Host serveurProd
+          HostName $SSH_HOST
+          User $SSH_USER
+          IdentityFile ~/.ssh/id_rsa.key
+          StrictHostKeyChecking no
+          END
+      - name: "Connexion au serveur de prod"
         run: |
-          # Test de connexion SSH avec verbosité
-          ssh -v deploy_host 'echo "Test de connexion réussi"'
+          ssh serveurProd 'cd /var/www/html/CI_CD_Deploiement/ && git fetch && git pull'
 
-      - name: Déploiement via SSH
-        run: |
-          # Synchronisation des fichiers avec plus de verbosité
-          rsync -avvz --delete \
-            --exclude '.git*' \
-            --exclude 'node_modules' \
-            --timeout=60 \
-            -e "ssh -p 22" \
-            ./ deploy_host:/var/www/pokedex/ || {
-              echo "Erreur lors de la synchronisation rsync"
-              exit 1
-            }
 
-          # Connexion SSH et redémarrage des services avec gestion d'erreurs
-          ssh deploy_host '
-            cd /var/www/pokedex && \
-            docker-compose down && \
-            docker-compose up -d --build
-          ' || {
-            echo "Erreur lors du redémarrage des services Docker"
-            exit 1
-          }
+      
