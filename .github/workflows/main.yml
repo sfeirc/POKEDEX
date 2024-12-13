@@ -43,14 +43,11 @@ jobs:
       - name: Déploiement via SSH
         run: |
           # Synchronisation des fichiers
-          rsync -avz --delete \
-            --exclude '.git*' \
-            --exclude 'node_modules' \
-            ./ deploy_host:/var/www/pokedex/
+            ./ deploy_host:/var/www/html/pokedex/
 
           # Connexion SSH et redémarrage des services
           ssh deploy_host '
-            cd /var/www/pokedex && \
+            cd /var/www/html/pokedex && \
             docker-compose down && \
             docker-compose up -d --build
           '
